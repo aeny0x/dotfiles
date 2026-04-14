@@ -3,7 +3,8 @@
 (setq make-backup-files nil)
 (setq inhibit-startup-screen t)
 
-;; MISC 
+
+;; MISC
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
@@ -12,6 +13,15 @@
 (ido-mode 1)
 (split-window-horizontally)
 (toggle-frame-fullscreen)
+;; @todo : configure indentation on scala-mode
+
+;; Fix scala output on compilation mode.
+;; Also setting SCALA_COLORS=false on .bashrc should yield the same results.
+
+(require 'ansi-color)
+(defun colorize-compile-mode ()
+  (ansi-color-apply-on-region compilation-filter-start (point)))
+(add-hook 'compilation-filter-hook 'colorize-compile-mode)
 
 ;; simple function to highlight @TODO
 (add-hook 'prog-mode-hook
@@ -20,6 +30,13 @@
              nil
              '(("\\(@\\(?:todo\\|TODO\\)\\)" 1 'font-lock-warning-face t)))
             (font-lock-flush)))
+
+;; Whitespace mode
+(defun set-whitespace-mode ()
+  (interactive)
+  (add-to-list 'write-file-functions 'delete-trailing-whitespace))
+
+(add-hook 'scala-mode-hook 'set-whitespace-mode)
 
 ;; NAVIGATION
 (defun switch-c-h ()
