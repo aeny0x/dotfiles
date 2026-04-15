@@ -1,8 +1,13 @@
+;; MELPA
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
 ;; GLOBAL VARIABLES
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (setq make-backup-files nil)
 (setq inhibit-startup-screen t)
-
+(setq treesit-font-lock-level 4)
 
 ;; MISC
 (menu-bar-mode 0)
@@ -13,14 +18,16 @@
 (ido-mode 1)
 (split-window-horizontally)
 (toggle-frame-fullscreen)
-;; @todo : configure indentation on scala-mode
+
+(setq treesit-language-source-alist
+      '((scala "https://github.com/tree-sitter/tree-sitter-scala" "v0.20.3")))
 
 ;; Fix scala output on compilation mode.
 ;; Also setting SCALA_COLORS=false on .bashrc should yield the same results.
-
 (require 'ansi-color)
 (defun colorize-compile-mode ()
   (ansi-color-apply-on-region compilation-filter-start (point)))
+
 (add-hook 'compilation-filter-hook 'colorize-compile-mode)
 
 ;; simple function to highlight @TODO
@@ -36,7 +43,7 @@
   (interactive)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 
-(add-hook 'scala-mode-hook 'set-whitespace-mode)
+(add-hook 'scala-ts-mode-hook 'set-whitespace-mode)
 
 ;; NAVIGATION
 (defun switch-c-h ()
@@ -62,7 +69,5 @@
 
 (global-set-key (kbd "C-c o") #'switch-c-h)
 (global-set-key (kbd "M-f") #'find-file-other-window)
-
-
 
 (load-file custom-file)
