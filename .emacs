@@ -18,6 +18,7 @@
 (ido-mode 1)
 (split-window-horizontally)
 (toggle-frame-fullscreen)
+(set-fringe-mode -1)
 
 (setq treesit-language-source-alist
       '((scala "https://github.com/tree-sitter/tree-sitter-scala" "v0.20.3")))
